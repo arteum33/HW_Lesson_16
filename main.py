@@ -2,7 +2,10 @@ from flask import Flask, render_template, request
 import requests
 import pprint
 
-
+'''
+полезная информация по методу request.form/request.form.get/request.args/get получения данных из форм и их публикация на другой странице HTML
+https://qastack.ru/programming/10434599/get-the-data-received-in-a-flask-request
+'''
 
 
 app = Flask(__name__)
@@ -33,7 +36,7 @@ def results():
     # Cкачивание вакансий
     URL = 'https://api.hh.ru/vacancies'
     # параметры запроса по ключевому слову Python
-    parameters = {'text': 'NAME: data[keyword1] AND data[keyword1]'}
+    parameters = {'text': 'NAME: (Python)'}
     data_collection = requests.get(URL, params=parameters).json()
     data_list.append(data_collection)
     for j in data_list:
@@ -67,7 +70,7 @@ def results():
     print('Для расчета использовано: ', data_num, 'вакансий')
     print('Средняя зарплата по запросу "Python": ', int(avg_salary), 'руб.')
 
-    return render_template('results.html', data=data)
+    return render_template('results.html', data=data, avg_salary=avg_salary)
 
 
 @app.route('/contacts')
