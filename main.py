@@ -23,7 +23,6 @@ def form_page():
 
 @app.route('/results', methods = ['GET','POST'])
 def results():
-    # print(request.form)
     city = request.args.get('city')
     keywords = request.args.get('keywords')
     data = {
@@ -34,10 +33,17 @@ def results():
     total_salary = 0
     data_num = 0
     # Cкачивание вакансий
+    # URL = 'https://api.hh.ru/vacancies'
+    # parameters = {'text': data[keywords],
+    #               'area': data[city]
+    #               }
+    # data_collection = requests.get(URL, params=parameters).json()
+
+    # оригинальный код
     URL = 'https://api.hh.ru/vacancies'
-    # параметры запроса по ключевому слову Python
-    parameters = {'text': 'NAME: (Python)'}
+    parameters = {'text': 'NAME: (менеджер) AND (Москва)'}
     data_collection = requests.get(URL, params=parameters).json()
+    # print(data_collection)
     data_list.append(data_collection)
     for j in data_list:
         y = j['items']
@@ -65,12 +71,13 @@ def results():
         data_num += n
         # считаем среднюю ЗП
     avg_salary = total_salary / data_num
-    print('Данные собраны на: ', str(URL[12:17]))
-    print('Регион сбора данных: Москва')
+    data_link = (URL[12:17])
+    # print('Данные собраны на: ', str(URL[12:17]))
+    # print('Регион сбора данных: Москва')
     print('Для расчета использовано: ', data_num, 'вакансий')
     print('Средняя зарплата по запросу "Python": ', int(avg_salary), 'руб.')
 
-    return render_template('results.html', data=data, avg_salary=avg_salary)
+    return render_template('results.html', data=data, avg_salary=avg_salary, data_num=data_num, data_link=data_link)
 
 
 @app.route('/contacts')
