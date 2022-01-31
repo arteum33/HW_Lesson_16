@@ -33,16 +33,8 @@ def results():
     total_salary = 0
     data_num = 0
     # Cкачивание вакансий
-    # URL = 'https://api.hh.ru/vacancies'
-    # parameters = {'text': data[keywords],
-    #               'area': data[city]
-    #               }
-    # data_collection = requests.get(URL, params=parameters).json()
-
-    # оригинальный код
     URL = 'https://api.hh.ru/vacancies'
-    parameters = {'text': 'NAME: (менеджер) AND (Москва)'}
-    parameters = {'text': city and keywords}
+    parameters = {'text': city and keywords} # фильтрация данных по переменным, вводимым в форме
     data_collection = requests.get(URL, params=parameters).json()
     # print(data_collection)
     data_list.append(data_collection)
