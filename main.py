@@ -42,6 +42,7 @@ def results():
     # оригинальный код
     URL = 'https://api.hh.ru/vacancies'
     parameters = {'text': 'NAME: (менеджер) AND (Москва)'}
+    parameters = {'text': city and keywords}
     data_collection = requests.get(URL, params=parameters).json()
     # print(data_collection)
     data_list.append(data_collection)
@@ -70,13 +71,9 @@ def results():
         # добавляем сумму "n" по количеству найденных ЗП
         data_num += n
         # считаем среднюю ЗП
-    avg_salary = total_salary / data_num
+    avg_salary_1 = total_salary / data_num
+    avg_salary = int(avg_salary_1)
     data_link = (URL[12:17])
-    # print('Данные собраны на: ', str(URL[12:17]))
-    # print('Регион сбора данных: Москва')
-    print('Для расчета использовано: ', data_num, 'вакансий')
-    print('Средняя зарплата по запросу "Python": ', int(avg_salary), 'руб.')
-
     return render_template('results.html', data=data, avg_salary=avg_salary, data_num=data_num, data_link=data_link)
 
 

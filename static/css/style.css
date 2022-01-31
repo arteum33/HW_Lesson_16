@@ -19,3 +19,10 @@
     .btn-secondary:active:focus,.show>.btn-secondary.dropdown-toggle:focus{box-shadow:0 0 0 .25rem rgba(130,138,145,.5)}
     .btn-secondary.disabled,.btn-secondary:disabled{color:#fff;background-color:#6c757d;border-color:#6c757d}
 
+/* Стили таблицы (IKSWEB) - https://iksweb.ru/tools/generator-table-html/ */
+table.iksweb{text-decoration: none;border-collapse:collapse;width:auto;text-align:center;}
+table.iksweb th{font-weight:normal;font-size:14px; color:#ffffff;background-color:#354251;}
+table.iksweb td{font-size:13px;color:#354251;}
+table.iksweb td,table.iksweb th{white-space:pre-wrap;padding:10px 5px;line-height:13px;vertical-align: middle;border: 1px solid #354251;}
+table.iksweb tr:hover{background-color:#f9fafb}
+table.iksweb tr:hover td{color:#354251;cursor:default;}
