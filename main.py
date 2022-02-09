@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+import sqlite3 as lite
 import requests
 import pprint
 
@@ -20,6 +21,13 @@ def main_page():
 def form_page():
     return render_template('form.html')
 
+connect = None
+    try:
+        connect = lite.connect('parcing_HH.db')
+        cur = connect.cursor()
+    except lite.Error as e:
+        print(f"Error {e.args[0]}:")
+        sys.exit(1)
 
 @app.route('/results', methods = ['GET','POST'])
 def results():
@@ -66,7 +74,11 @@ def results():
     avg_salary_1 = total_salary / data_num
     avg_salary = int(avg_salary_1)
     data_link = (URL[12:17])
+    print(city, keywords, avg_salary, data_num, data_link)
+
     return render_template('results.html', data=data, avg_salary=avg_salary, data_num=data_num, data_link=data_link)
+
+# Подключаемся к базе (создаем базу)
 
 
 @app.route('/contacts')
