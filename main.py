@@ -1,12 +1,12 @@
+# -*- coding: utf-8 -*-
 from flask import Flask, render_template, request
 import sqlite3 as lite
 import requests
 import pprint
 
-'''
-полезная информация по методу request.form/request.form.get/request.args/get получения данных из форм и их публикация на другой странице HTML
-https://qastack.ru/programming/10434599/get-the-data-received-in-a-flask-request
-'''
+
+# полезная информация по методу request.form/request.form.get/request.args/get получения данных из форм и их публикация
+# на другой странице HTML https://qastack.ru/programming/10434599/get-the-data-received-in-a-flask-request
 
 
 app = Flask(__name__)
@@ -21,13 +21,6 @@ def main_page():
 def form_page():
     return render_template('form.html')
 
-connect = None
-    try:
-        connect = lite.connect('parcing_HH.db')
-        cur = connect.cursor()
-    except lite.Error as e:
-        print(f"Error {e.args[0]}:")
-        sys.exit(1)
 
 @app.route('/results', methods = ['GET','POST'])
 def results():
@@ -74,11 +67,58 @@ def results():
     avg_salary_1 = total_salary / data_num
     avg_salary = int(avg_salary_1)
     data_link = (URL[12:17])
-    print(city, keywords, avg_salary, data_num, data_link)
+
+# Создание базы данных и записи данных в нее
+    connect = None
+    try:
+        connect = lite.connect('parcing_HH.db', check_same_thread=False)
+        cur = connect.cursor()
+    except lite.Error as e:
+        print(f"Error {e.args[0]}:")
+        sys.exit(1)
+
+    connect = lite.connect('parcing_HH.db')
+    cur = connect.cursor()
+ # Если база не существует, то создается новая, иначе пропускаем процесс ее создания
+    try:
+        cur.execute(
+            "CREATE TABLE parcing_HH (id TEXT,source TEXT, key_word TEXT, location_req TEXT, Num_job INT, av_salary INT)")
+        connect.commit()
+    except lite.OperationalError:
+        pass
+# Считаем количество записей в базе для их нумерации
+    sqlite_select_query = """SELECT * FROM parcing_HH"""
+    cur.execute(sqlite_select_query)
+    records = cur.fetchall()
+    data_numb = len(records)
+
+    if data_numb == 0:
+        w = 1
+    else:
+        w = data_numb + 1
+    data_link_f = str(data_link)
+    keywords_f = str(keywords)
+    city_f = str(city)
+    data_num_f = int(data_numb+1)
+    avg_salary_f = int(avg_salary)
+    cur.execute("INSERT INTO parcing_HH VALUES(?,?,?,?,?,?)",
+                (w, data_link_f, keywords_f, city_f, data_num_f, avg_salary_f))
+
+    # проверяем, что занесено в базу данных
+    with connect:
+        cur = connect.cursor()
+        cur.execute('SELECT * FROM parcing_HH')
+        while True:
+            row = cur.fetchone()
+            if row == None:
+                break
+            print(row[0], row[1], row[2], row[3], row[4], row[5])
+
+    print('Всего записей:', data_num_f)
+    connect.close()
 
     return render_template('results.html', data=data, avg_salary=avg_salary, data_num=data_num, data_link=data_link)
 
-# Подключаемся к базе (создаем базу)
 
 
 @app.route('/contacts')
