@@ -8,4 +8,10 @@ Homework for Lesson #16 - #19: sites on Flask. MVC
 1. main_16_Flask.py - простейшая реализация сбора, обработки и вывода данных, собранных через API, c использванием HTML формата вывода данных, а также в терминал;
 2. main_17_sqlite.py - тоже, что и первое, включая сохранение обработанных данных в базу данных на основе sqlite
 3. main_18_sqlalchemy.py - тоже, что и первое, включая сохранение обработанных данных в базу данных на основе sqlalchemy
-4. main_19_descriptors.py - ////
+4. main_19_descriptors.py - решения из урока 19 оказались нерациональными, так как проще оказалось найти решение чере if:
+ if keywords_f != 'None' and city_f != 'None':
+        input_data = Vacancy(data_link_f, keywords_f, city_f, data_num_f, avg_salary_f)
+        session.add(input_data)
+        session.commit()
+    else:
+        pass
